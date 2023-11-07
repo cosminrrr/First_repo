@@ -162,13 +162,6 @@ class Test(TestCase):
 
         print('TEST PASSED')
 
-        def test_incorect_email_or_password(self):
-            self.chrome.find_element(*self.Sign_upbtn).click()
-            self.chrome.find_element(*self.Existind_user_email).send_keys('magda99ro@yahoo.com')
-            self.chrome.find_element(*self.Password_existing_user).send_keys('Magdalena2')
-            self.chrome.find_element(*self.Login_btn).click()
-            elem = self.chrome.find_element(*self.Message_incorect_password_email)
-            self.assertTrue(elem.is_displayed(), 'Your email or password is incorrect!')
 
 
 
