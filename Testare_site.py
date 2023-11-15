@@ -1,15 +1,13 @@
-
+import unittest
 from time import sleep
-from unittest import TestCase
-
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.select import Select
 from webdriver_manager.chrome import ChromeDriverManager
 
+class Test1(unittest.TestCase):
 
-class Test(TestCase):
     # elementele din pagina
     # in loc sa le scriem de n ori in teste, le trecem aici o singura data
     Signup_Login_BTN = (By.XPATH, '//a[@href="/login"]/i[@class="fa fa-lock"]')
@@ -41,10 +39,12 @@ class Test(TestCase):
     Delete_acc = (By.XPATH, '//a[@href="/delete_account"]')
     Fake_Login = (By.XPATH, "//p[@style='color: red;']")
     Products_Btn = (By.LINK_TEXT, "https://automationexercise.com/products")
-
+    Existing_user_email = (By.XPATH, '//input[@data-qa="login-email"]')
+    CONTACT_US_LINK = (By.XPATH, '//a[@href="/contact_us"]')
     #2 se rulaza inainte de fiecare test si are rolul de a face set-up-ul de chrome inainte de fiecare test
     #Am implemetat metoda def setUp care se va rula inaintea fiecarui test. Are rolul de a face setUp-ul browser-ului
     #de chrome inainte de fiecare test cat si accesarea link-ului ste-ului testat.
+
 
 
     def setUp(self):
@@ -161,6 +161,22 @@ class Test(TestCase):
         assert actual == expected, f'INVALID URL: expected {expected} but found {actual}'
 
         print('TEST PASSED')
+
+
+    def test_register_same_email(self):
+        self.chrome.find_element(*self.Signup_Login_BTN).click()
+        self.chrome.find_element(*self.Name_Signup).send_keys('Cosmin')
+        self.chrome.find_element(*self.Email_Signup).send_keys('conturi4@gmail.com')
+        elem= self.chrome.find_element(*self.Existing_user_email)
+        self.assertTrue(elem.is_displayed(),'Email Address already exist')
+
+
+    def test_contact_title(self):
+        self.chrome.find_element(*self.CONTACT_US_LINK).click()
+        self.chrome.implicitly_wait(9)
+        actual= self.chrome.current_url
+        expected='https://automationexercise.com/contact_us'
+        self.assertEqual(expected, actual, 'URL is incorrect')
 
 
 
